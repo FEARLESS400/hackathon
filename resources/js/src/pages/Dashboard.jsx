@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios';
 
 function Dashboard(){
@@ -50,6 +50,10 @@ function Dashboard(){
   return (
     <>
       <h1>Dashboard</h1>
+
+      <Link to="/users">check users</Link>
+      <Link to="/addpost">Add Post</Link>
+      <br />
 
       <button onClick={handleClick}>
         Logout

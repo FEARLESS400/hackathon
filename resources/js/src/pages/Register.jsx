@@ -9,11 +9,12 @@ function Register() {
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [passwordConfirmation,setPasswordConfirmation] = useState("");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
-
+  const handleRegister = async (event) => {
+    event.preventDefault();
     try {
 
       const res = await axios.post("http://127.0.0.1:8000/api/register",{
@@ -27,10 +28,11 @@ function Register() {
 
       localStorage.setItem("token", token);
 
-      console.log(res.data);
+      navigate('/login');      
 
     } catch(err){
-      console.log(err.response.data);
+      console.log(err.response.data.message);
+      setError(err.response.data);
     }
 
   };
@@ -70,6 +72,10 @@ function Register() {
           autoComplete="new-password"
           onChange={(e)=>setPasswordConfirmation(e.target.value)}
         />
+
+        {
+          error && error
+        }
 
         <button type="submit">
           Register

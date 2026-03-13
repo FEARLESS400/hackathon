@@ -7,6 +7,9 @@ import Login from './src/pages/Login';
 import Register from './src/pages/Register';
 import Dashboard from './src/pages/Dashboard';
 import Default from './src/pages/Default';
+import Users from "./src/pages/Users";
+import AddPost from "./src/pages/AddPost";
+
 
 
 function App() {
@@ -17,6 +20,8 @@ function App() {
                 <Route path='/login' element={<Login />}></Route>
                 <Route path='/register' element={<Register />}></Route>
                 <Route path='/dashboard' element={<Dashboard />}></Route>
+                <Route path='/users' element={<Users />}></Route>
+                <Route path='/addpost' element={<AddPost />}></Route>
             </Routes>
         </Router>
     );

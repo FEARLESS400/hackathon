@@ -29,14 +29,19 @@ class PostController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        $fields = $request->validate([
+        $request->validate([
             'title' => 'required|max:255',
-            'body' => 'required'
+            'body' => 'required',
+            'user_id' => 'required'
         ]);
 
-        $post = $request->user()->posts()->create($fields);
+        $post = $request->user()->posts()->create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'user_id' => auth()->id
+        ]);
 
-        return $post;
+        return response()->json($post);
     }
 
     /**

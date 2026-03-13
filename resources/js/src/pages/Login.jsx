@@ -10,7 +10,8 @@ function Login() {
 
   const navigate = useNavigate();
 
-const handleLogin = async () => {
+const handleLogin = async (even) => {
+    even.preventDefault();
 
   try {
 
@@ -23,8 +24,9 @@ const handleLogin = async () => {
 
     localStorage.setItem("token", token);
 
-    navigate("/dashboard");
+    console.log(res)
 
+    navigate("/dashboard");
   } catch(err){
     console.log(err);
   }
