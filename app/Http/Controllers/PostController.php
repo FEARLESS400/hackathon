@@ -32,13 +32,11 @@ class PostController extends Controller implements HasMiddleware
         $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
-            'user_id' => 'required'
         ]);
 
         $post = $request->user()->posts()->create([
             'title' => $request->title,
             'body' => $request->body,
-            'user_id' => auth()->id
         ]);
 
         return response()->json($post);

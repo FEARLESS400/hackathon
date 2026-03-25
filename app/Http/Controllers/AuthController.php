@@ -5,44 +5,40 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function register (Request $request) {
-        $fields = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
+    public function register(Request $request)
+{
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+    ]);
 
-        $user = User::create($fields);
-        $token = $user->createToken($request->name);
+    $token = $user->createToken('auth_token')->plainTextToken;
 
-        return [
-            'user' => $user,
-            'token' => $token->plainTextToken
-        ];
-    } 
+    return response()->json([
+        'user' => $user,
+        'token' => $token
+    ]);
+}
 
-    public function login (Request $request) {
-        $request->validate([
-            'email' => 'required|email|exists:users',
-            'password' => 'required'
-        ]);
-        
-        $user = User::where('email', $request->email)->first();
+    public function login(Request $request)
+{
+    if (!Auth::attempt($request->only('email', 'password'))) {
+        return response()->json(['message' => 'Invalid credentials'], 401);
+    }
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return ['error' => 'incorrect password'];
-        }
+    $user = Auth::user();
+    $token = $user->createToken('auth_token')->plainTextToken;
 
-        $token = $user->createToken($user->name);
-
-        return [
-            'user' => $user,
-            'token' => $token->plainTextToken
-        ];
-    } 
+    return response()->json([
+        'user' => $user,
+        'token' => $token
+    ]);
+}
 
     public function logout (Request $request) {
         $request->user()->tokens()->delete();
