@@ -11,13 +11,13 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-// Route::middleware('auth:sanctum')->apiResource('posts', PostController::class);
+Route::middleware('auth:sanctum')->apiResource('/posts', PostController::class);
+// Route::get('/post/store', [PostController::class, 'store']);
+// Route::middleware('auth:sanctum')->group(function () {
 
-Route::middleware('auth:sanctum')->group(function () {
+//     Route::post('/posts', [PostController::class, 'store']);
 
-    Route::post('/posts', [PostController::class, 'store']);
-
-});
+// });
 
 Route::get('/users', [UserController::class, 'index']);
 

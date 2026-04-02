@@ -9,6 +9,16 @@ use Illuminate\Auth\Access\Response;
 class PostPolicy
 {
     /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function Modify(User $user, Post $post): Response
+    {
+        return $user->id === $post->user_id 
+        ? Response::allow()
+        : Response::deny('you do not own this post!');
+    }
+
+    /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
@@ -56,11 +66,5 @@ class PostPolicy
         return false;
     }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Post $post): bool
-    {
-        return false;
-    }
+    
 }

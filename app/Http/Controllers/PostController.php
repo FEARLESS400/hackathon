@@ -6,13 +6,14 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller implements HasMiddleware
 {
     public static function middleware()
     {
         return [
-            new Middleware('Auth:sanctum', except: ['index', 'show'])
+            new Middleware('auth:sanctum', except: ['index', 'show'])
         ];
     }
 
@@ -32,14 +33,16 @@ class PostController extends Controller implements HasMiddleware
         $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
-            'user_id' => 'required'
         ]);
 
-        $post = $request->user()->posts()->create([
-            'title' => $request->title,
-            'body' => $request->body,
-            'user_id' => auth()->id
+        $post = Post::create([
+            'title' => $request->title, 
+            'body' => $request ->body,
+            'user_id' => auth()->id(),
         ]);
+        
+
+        // $post = $request->user()->posts()->create($fields);
 
         return response()->json($post);
     }
@@ -57,6 +60,8 @@ class PostController extends Controller implements HasMiddleware
      */
     public function update(Request $request, Post $post)
     {
+        Gate::authorize('Modify', $post);
+
         $fields = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required'
@@ -72,6 +77,8 @@ class PostController extends Controller implements HasMiddleware
      */
     public function destroy(Post $post)
     {
+        Gate::authorize('Modify', $post);
+        
         $post->delete();
 
         return ['message' => 'post was deleted!'];

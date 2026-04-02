@@ -3,7 +3,6 @@ import React, { useState } from "react";
 
 function AddPost() {
 
-  const [userid, setUserid] = useState('');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
@@ -17,7 +16,6 @@ function AddPost() {
       const res = await axios.post(
         "http://127.0.0.1:8000/api/posts",
         {
-          user_id: userid,
           title: title,
           body: body
         },
@@ -41,12 +39,6 @@ function AddPost() {
       <h1>Add a Post</h1>
 
       <form onSubmit={handleSubmit}>
-
-        <label>User id:</label>
-        <input
-          type="text"
-          onChange={(e) => setUserid(e.target.value)}
-        />
 
         <br />
 
